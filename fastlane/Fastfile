@@ -1,0 +1,64 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+desc "Executes SDK Unit Tests"
+lane :test do
+  scan(
+    project: ENV['PROJECT'],
+    scheme: ENV['SCHEME'],
+    destination: ENV['DESTINATION'],
+    sdk: ENV['SDK']
+  )
+end
+
+desc "Generates Code Coverage Files"
+lane :code_coverage do
+  scan(
+    project: ENV['PROJECT'],
+    scheme: ENV['SCHEME'],
+    device: ENV['COVERAGE'],
+    code_coverage: true
+  )
+
+  # Generate code coverage files
+  slather(
+    travis: ENV["TRAVIS_CI"],
+    proj: ENV['PROJECT'],
+    scheme: ENV['SCHEME'],
+    output_directory: 'fastlane/test_output',
+    use_bundle_exec: true,
+    cobertura_xml: true,
+    decimals: 2,
+    verbose: true,
+    ignore: "Tests/**/*"
+  )
+end
+
+desc "Lints a release using Cocoapods"
+lane :lint_cocoapods do
+  pod_lib_lint(
+    podspec: "#{ENV['SCHEME']}.podspec",
+    use_bundle_exec: true,
+    verbose: true,
+    allow_warnings: true
+  )
+end
+
+desc "Lints a release using Swift Package Manager"
+lane :lint_swift_package_manager do
+  Dir.chdir("..") do
+    Action.sh('swift build -c release --verbose')
+  end
+end

@@ -1,0 +1,17 @@
+---
+changelog:
+  - changes:
+    - text: "Initial release of PubNubCSM"
+      type: feature
+    date: 2020-03-30
+    version: v1.0.0
+supported-platforms:
+  - platforms:
+      - iOS 8.0 or higher
+      - macOS 10.10 or higher
+      - tvOS 9.0 or higher
+      - watchOS 2.0 or higher
+name: swift-pubnubcsm
+scm: github.com/pubnub/swift-pubnubcsm
+version: "1.0.0"
+schema: 1

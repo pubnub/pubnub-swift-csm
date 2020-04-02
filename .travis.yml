@@ -1,0 +1,42 @@
+language: objective-c
+os: osx
+osx_image: xcode11.3
+rvm: 2.5.3
+
+cache:
+  bundler: true
+  directories:
+  - .build # Swift Package Manager
+  - /Users/travis/.rvm/ # RVM
+  - $HOME/Library/Caches/Homebrew # brew
+
+before_install:
+  - gem install -v 2.0.1 bundler
+  - bundle install && brew bundle
+
+stages:
+  - name: "Unit Tests"
+    if: type = push
+  - name: Validate
+    if: type = pull_request
+jobs:
+  include:
+    - stage: Validate
+      name: "Code Coverage"
+      script: bundle exec fastlane code_coverage --env ios
+#    - name: Cocoapods
+#      script: bundle exec fastlane lint_cocoapods
+    - name: "Swift Package Manager"
+      script: bundle exec fastlane lint_swift_package_manager
+    - stage: "Unit Tests"
+      name: iOS
+      before_script: xcrun simctl list -j
+      script: bundle exec fastlane test --env ios
+    - name: macOS
+      script: bundle exec fastlane test --env macos
+
+before_cache:
+  - rvm cleanup all
+  - bundle clean
+  - swift package clean
+  - brew cleanup
