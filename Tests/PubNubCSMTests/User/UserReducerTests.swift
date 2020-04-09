@@ -142,7 +142,8 @@ final class UserReducerTests: XCTestCase {
   func testMembersRemovedAction() {
     let response = PubNubMembersResponsePayload(status: 200, data: [mockMember], totalCount: nil, next: nil, prev: nil)
 
-    let action = MemberActionType.membersRemoved(spaceId: testSpaceId, response: response, users: [mockUser])
+    let action = MemberActionType.membersRemoved(spaceId: testSpaceId, response: response,
+                                                 removedIds: [mockMember.id], users: [mockUser])
 
     UserReducer.reducer(action, state: &mockState)
 

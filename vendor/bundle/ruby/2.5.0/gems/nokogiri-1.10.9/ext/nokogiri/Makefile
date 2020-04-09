@@ -31,8 +31,8 @@ rubyhdrdir = $(includedir)/$(RUBY_VERSION_NAME)
 vendorarchdir = $(vendorlibdir)/$(sitearch)
 vendorlibdir = $(vendordir)/$(ruby_version)
 vendordir = $(rubylibprefix)/vendor_ruby
-sitearchdir = $(DESTDIR)./.gem.20200402-25049-135t4wm
-sitelibdir = $(DESTDIR)./.gem.20200402-25049-135t4wm
+sitearchdir = $(DESTDIR)./.gem.20200409-10286-1pp3t0z
+sitelibdir = $(DESTDIR)./.gem.20200409-10286-1pp3t0z
 sitedir = $(rubylibprefix)/site_ruby
 rubyarchdir = $(rubylibdir)/$(arch)
 rubylibdir = $(rubylibprefix)/$(ruby_version)
@@ -122,8 +122,8 @@ TOUCH = exit >
 #### End of system configuration section. ####
 
 preload = 
-libpath = . $(libdir) /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/nokogiri-1.10.9/ports/x86_64-apple-darwin18.2.0/libxml2/2.9.10/lib /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/nokogiri-1.10.9/ports/x86_64-apple-darwin18.2.0/libxslt/1.1.34/lib /usr/local/opt/libyaml/lib /usr/local/opt/libksba/lib /usr/local/opt/readline/lib /usr/local/opt/zlib/lib /usr/local/opt/openssl@1.1/lib /usr/local/Cellar/xz/5.2.4/lib
-LIBPATH =  -L. -L$(libdir) -L/Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/nokogiri-1.10.9/ports/x86_64-apple-darwin18.2.0/libxml2/2.9.10/lib -L/Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/nokogiri-1.10.9/ports/x86_64-apple-darwin18.2.0/libxslt/1.1.34/lib -L/usr/local/opt/libyaml/lib -L/usr/local/opt/libksba/lib -L/usr/local/opt/readline/lib -L/usr/local/opt/zlib/lib -L/usr/local/opt/openssl@1.1/lib -L/usr/local/Cellar/xz/5.2.4/lib
+libpath = . $(libdir) /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/nokogiri-1.10.9/ports/x86_64-apple-darwin18.2.0/libxml2/2.9.10/lib /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/nokogiri-1.10.9/ports/x86_64-apple-darwin18.2.0/libxslt/1.1.34/lib /usr/local/opt/libyaml/lib /usr/local/opt/libksba/lib /usr/local/opt/readline/lib /usr/local/opt/zlib/lib /usr/local/opt/openssl@1.1/lib /usr/local/Cellar/xz/5.2.5/lib
+LIBPATH =  -L. -L$(libdir) -L/Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/nokogiri-1.10.9/ports/x86_64-apple-darwin18.2.0/libxml2/2.9.10/lib -L/Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/nokogiri-1.10.9/ports/x86_64-apple-darwin18.2.0/libxslt/1.1.34/lib -L/usr/local/opt/libyaml/lib -L/usr/local/opt/libksba/lib -L/usr/local/opt/readline/lib -L/usr/local/opt/zlib/lib -L/usr/local/opt/openssl@1.1/lib -L/usr/local/Cellar/xz/5.2.5/lib
 DEFFILE = 
 
 CLEANFILES = mkmf.log

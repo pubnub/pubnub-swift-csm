@@ -138,7 +138,7 @@ public struct SpaceReducer {
     case let .membershipsRetrieved(_, _, (spaces as [T]) as Any),
          let .spacesJoined(_, _, (spaces as [T]) as Any),
          let .membershipsUpdated(_, _, (spaces as [T]) as Any),
-         let .spacesLeft(_, _, (spaces as [T]) as Any):
+         let .spacesLeft(_, _, _, (spaces as [T]) as Any):
       spaces.forEach { state.spaces.updatePubNub($0, forKey: $0.id) }
     default:
       break

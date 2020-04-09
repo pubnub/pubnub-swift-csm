@@ -43,7 +43,6 @@ The PubNub CSM framework includes the following components that you help manage 
 
 ## Requirements
 - iOS 8.0+ / MacOS 10.10 / Mac Catalyst 13.0+ / tvOS 9.0+ / watchOS 2.0+
-- Xcode 11.4+
 - Swift 5+
 
 # Setup Instructions

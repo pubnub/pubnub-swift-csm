@@ -47,7 +47,7 @@ public enum MemberActionType: PubNubActionType {
   case errorUpdatingMembers(Error)
 
   case startedRemovingMembers(MemberModifyRequest)
-  case membersRemoved(spaceId: String, response: MemberAPIResponse, users: [PubNubUser])
+  case membersRemoved(spaceId: String, response: MemberAPIResponse, removedIds: [String], users: [PubNubUser])
   case errorRemovingMembers(Error)
 
   public func transcode<T: HashablePubNubMember>(into _: T.Type) -> PubNubActionType {
@@ -64,9 +64,10 @@ public enum MemberActionType: PubNubActionType {
       if let typedResponse = try? MembersResponsePayload<T>(protocol: response, into: T.self) {
         return MemberActionType.membersUpdated(spaceId: spaceId, response: typedResponse, users: users)
       }
-    case let .membersRemoved(spaceId, response, users):
+    case let .membersRemoved(spaceId, response, removedIds, users):
       if let typedResponse = try? MembersResponsePayload<T>(protocol: response, into: T.self) {
-        return MemberActionType.membersRemoved(spaceId: spaceId, response: typedResponse, users: users)
+        return MemberActionType.membersRemoved(spaceId: spaceId, response: typedResponse,
+                                               removedIds: removedIds, users: users)
       }
     default:
       break
@@ -91,10 +92,11 @@ public enum MemberActionType: PubNubActionType {
       if !typedUsers.isEmpty {
         return MemberActionType.membersUpdated(spaceId: spaceId, response: response, users: typedUsers)
       }
-    case let .membersRemoved(spaceId, response, users):
+    case let .membersRemoved(spaceId, response, removedIds, users):
       let typedUsers = users.compactMap { try? $0.transcode(into: T.self) }
       if !typedUsers.isEmpty {
-        return MemberActionType.membersRemoved(spaceId: spaceId, response: response, users: typedUsers)
+        return MemberActionType.membersRemoved(spaceId: spaceId, response: response,
+                                               removedIds: removedIds, users: typedUsers)
       }
     default:
       break
@@ -131,8 +133,20 @@ public struct MemberReducer {
     switch action {
     case let .membersRetrieved(spaceId, response as MembersResponsePayload<T>, _),
          let .membersAdded(spaceId, response as MembersResponsePayload<T>, _),
-         let .membersUpdated(spaceId, response as MembersResponsePayload<T>, _),
-         let .membersRemoved(spaceId, response as MembersResponsePayload<T>, _):
+         let .membersUpdated(spaceId, response as MembersResponsePayload<T>, _):
+      if state.membersBySpaceId[spaceId] != nil {
+        state.membersBySpaceId[spaceId]?.update(contentsOf: response.data)
+      } else {
+        state.membersBySpaceId[spaceId] = response.data
+      }
+
+    case let .membersRemoved(spaceId, response as MembersResponsePayload<T>, removedIds, _):
+      // Remove the the ids of memberships that left
+      removedIds.forEach { memberId in
+        state.membersBySpaceId[spaceId]?.removeAll { $0.id == memberId }
+      }
+
+      // Update with any delta
       if state.membersBySpaceId[spaceId] != nil {
         state.membersBySpaceId[spaceId]?.update(contentsOf: response.data)
       } else {

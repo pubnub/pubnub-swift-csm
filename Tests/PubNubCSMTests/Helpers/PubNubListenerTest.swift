@@ -268,7 +268,7 @@ extension PubNubListenerTest {
       }
 
       switch action.transcode(into: MockMembership.self) {
-      case MembershipActionType.userAddedToSpaceEvent(let membership as MockMembership, _):
+      case let MembershipActionType.userAddedToSpaceEvent(membership as MockMembership, _):
         XCTAssertEqual(membership, mockMembership)
       default:
         XCTFail("\(action) should not have been fired")
@@ -308,7 +308,7 @@ extension PubNubListenerTest {
       }
 
       switch action.transcode(into: MockMembership.self) {
-      case MembershipActionType.userMembershipUpdatedOnSpaceEvent(let membership as MockMembership, _):
+      case let MembershipActionType.userMembershipUpdatedOnSpaceEvent(membership as MockMembership, _):
         XCTAssertEqual(membership, mockMembership)
       default:
         XCTFail("\(action) should not have been fired")
@@ -354,7 +354,7 @@ extension PubNubListenerTest {
       }
 
       switch action.transcode(into: MockMember.self) {
-      case MembershipActionType.userRemovedFromSpaceEvent(let userId, _):
+      case let MembershipActionType.userRemovedFromSpaceEvent(userId, _):
         XCTAssertEqual(userId, mockMember.id)
       default:
         XCTFail("\(action) should not have been fired")

@@ -222,6 +222,7 @@ final class MembershipCommandTests: XCTestCase {
     wait(for: [dispatchExpectation, resultExpectation, closureExpectation], timeout: 1.0)
   }
 
+  // swiftlint:disable:next function_body_length
   func testLeaveMemberships() {
     let dispatchExpectation = expectation(description: "Start Action Dispatch")
     let resultExpectation = expectation(description: "Result Action Dispatch")
@@ -249,7 +250,12 @@ final class MembershipCommandTests: XCTestCase {
         XCTAssertEqual(request.userId, testRequest.userId)
         XCTAssertEqual(request.modifiedBy.compactMap { try? $0.transcode(into: MockMembership.self) }, [mockMembership])
         dispatchExpectation.fulfill()
-      case let MembershipActionType.spacesLeft(userId, response as MembershipsResponsePayload<MockMembership>, spaces):
+      case let MembershipActionType.spacesLeft(
+        userId,
+        response as MembershipsResponsePayload<MockMembership>,
+        _,
+        spaces
+      ):
         XCTAssertEqual(userId, self.mockUser.id)
         XCTAssertEqual(response.data.map { $0.id }, [mockMembership.id])
         XCTAssertEqual(spaces.compactMap { try? $0.transcode(into: MockSpace.self).id }, [self.mockSpace.id])

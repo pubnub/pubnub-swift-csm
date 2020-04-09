@@ -1,10 +1,15 @@
 ---
 changelog:
   - changes:
+    - text: "Membership/Member actions now include the removed/left elements"
+      type: enhancement
+    date: 2020-03-30
+    version: v0.1.1
+  - changes:
     - text: "Initial release of PubNubCSM"
       type: feature
     date: 2020-03-30
-    version: v1.0.0
+    version: v0.1.0
 supported-platforms:
   - platforms:
       - iOS 8.0 or higher

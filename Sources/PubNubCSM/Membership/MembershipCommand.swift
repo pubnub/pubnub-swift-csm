@@ -120,7 +120,7 @@ public enum MembershipCommand: Action {
 
   public static func leave(
     _ request: MembershipModifyRequest,
-    completion: @escaping ((Result<MembershipResponseTuple, Error>) -> Void) = { _ in }
+    completion: @escaping ((Result<MembershipsLeftResponseTuple, Error>) -> Void) = { _ in }
   ) -> ThunkAction {
     return ThunkAction { dispatch, _, service in
       dispatch(MembershipActionType.startedLeavingSpaces(request))
@@ -131,11 +131,13 @@ public enum MembershipCommand: Action {
           dispatch(MembershipActionType.spacesLeft(
             userId: request.userId,
             response: response,
+            leftIds: request.modifiedBy.map { $0.id },
             spaces: response.data.compactMap { $0.space }
           ))
           completion(.success((
             userId: request.userId,
             response: response,
+            leftIds: request.modifiedBy.map { $0.id },
             spaces: response.data.compactMap { $0.space }
           )))
         case let .failure(error):

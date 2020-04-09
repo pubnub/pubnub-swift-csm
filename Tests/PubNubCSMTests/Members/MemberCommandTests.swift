@@ -241,7 +241,7 @@ final class MemberCommandTests: XCTestCase {
         XCTAssertEqual(request.spaceId, testRequest.spaceId)
         XCTAssertEqual(request.modifiedBy.compactMap { try? $0.transcode(into: MockMember.self) }, [mockMember])
         dispatchExpectation.fulfill()
-      case let MemberActionType.membersRemoved(spaceId, response as MembersResponsePayload<MockMember>, users):
+      case let MemberActionType.membersRemoved(spaceId, response as MembersResponsePayload<MockMember>, _, users):
         XCTAssertEqual(spaceId, self.mockSpace.id)
         XCTAssertEqual(response.data.map { $0.id }, [mockMember].map { $0.id })
         XCTAssertEqual(users.compactMap { try? $0.transcode(into: MockUser.self).id }, [self.mockUser].map { $0.id })

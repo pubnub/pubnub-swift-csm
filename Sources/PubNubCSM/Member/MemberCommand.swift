@@ -118,7 +118,7 @@ public enum MemberCommand: Action {
 
   public static func remove(
     _ request: MemberModifyRequest,
-    completion: @escaping ((Result<MemberResponseTuple, Error>) -> Void) = { _ in }
+    completion: @escaping ((Result<MemberRemovedResponseTuple, Error>) -> Void) = { _ in }
   ) -> ThunkAction {
     return ThunkAction { dispatch, _, service in
       dispatch(MemberActionType.startedRemovingMembers(request))
@@ -129,11 +129,13 @@ public enum MemberCommand: Action {
           dispatch(MemberActionType.membersRemoved(
             spaceId: request.spaceId,
             response: response,
+            removedIds: request.modifiedBy.map { $0.id },
             users: response.data.compactMap { $0.user }
           ))
           completion(.success((
             spaceId: request.spaceId,
             response: response,
+            removedIds: request.modifiedBy.map { $0.id },
             users: response.data.compactMap { $0.user }
           )))
         case let .failure(error):

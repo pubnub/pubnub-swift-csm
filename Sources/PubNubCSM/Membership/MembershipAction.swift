@@ -47,7 +47,7 @@ public enum MembershipActionType: PubNubActionType {
   case errorUpdatingMemberships(Error)
 
   case startedLeavingSpaces(MembershipModifyRequest)
-  case spacesLeft(userId: String, response: MembershipAPIResponse, spaces: [PubNubSpace])
+  case spacesLeft(userId: String, response: MembershipAPIResponse, leftIds: [String], spaces: [PubNubSpace])
   case errorLeavingSpaces(Error)
 
   case userAddedToSpaceEvent(membership: PubNubMembership, member: PubNubMember)
@@ -68,9 +68,10 @@ public enum MembershipActionType: PubNubActionType {
       if let typedResponse = try? MembershipsResponsePayload<T>(protocol: response, into: T.self) {
         return MembershipActionType.membershipsUpdated(userId: userId, response: typedResponse, spaces: spaces)
       }
-    case let .spacesLeft(userId, response, spaces):
+    case let .spacesLeft(userId, response, leftIds, spaces):
       if let typedResponse = try? MembershipsResponsePayload<T>(protocol: response, into: T.self) {
-        return MembershipActionType.spacesLeft(userId: userId, response: typedResponse, spaces: spaces)
+        return MembershipActionType.spacesLeft(userId: userId, response: typedResponse,
+                                               leftIds: leftIds, spaces: spaces)
       }
     case let .userAddedToSpaceEvent(membership, member):
       if let typedMembership = try? membership.transcode(into: T.self) {
@@ -119,10 +120,11 @@ public enum MembershipActionType: PubNubActionType {
       if !typedSpaces.isEmpty {
         return MembershipActionType.membershipsUpdated(userId: userId, response: response, spaces: typedSpaces)
       }
-    case let .spacesLeft(userId, response, spaces):
+    case let .spacesLeft(userId, response, leftIds, spaces):
       let typedSpaces = spaces.compactMap { try? $0.transcode(into: T.self) }
       if !typedSpaces.isEmpty {
-        return MembershipActionType.spacesLeft(userId: userId, response: response, spaces: typedSpaces)
+        return MembershipActionType.spacesLeft(userId: userId, response: response,
+                                               leftIds: leftIds, spaces: typedSpaces)
       }
     default:
       break
@@ -160,8 +162,20 @@ public struct MembershipReducer {
     switch action {
     case let .membershipsRetrieved(userId, response as MembershipsResponsePayload<T>, _),
          let .spacesJoined(userId, response as MembershipsResponsePayload<T>, _),
-         let .membershipsUpdated(userId, response as MembershipsResponsePayload<T>, _),
-         let .spacesLeft(userId, response as MembershipsResponsePayload<T>, _):
+         let .membershipsUpdated(userId, response as MembershipsResponsePayload<T>, _):
+
+      if state.membershipsByUserId[userId] != nil {
+        state.membershipsByUserId[userId]?.update(contentsOf: response.data)
+      } else {
+        state.membershipsByUserId[userId] = response.data
+      }
+    case let .spacesLeft(userId, response as MembershipsResponsePayload<T>, leftIds, _):
+      // Remove the the ids of memberships that left
+      leftIds.forEach { membershipId in
+        state.membershipsByUserId[userId]?.removeAll { $0.id == membershipId }
+      }
+
+      // Update any delta from response
       if state.membershipsByUserId[userId] != nil {
         state.membershipsByUserId[userId]?.update(contentsOf: response.data)
       } else {

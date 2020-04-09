@@ -40,6 +40,13 @@ public typealias MemberResponseTuple = (
   users: [PubNubUser]
 )
 
+public typealias MemberRemovedResponseTuple = (
+  spaceId: String,
+  response: PubNubMembersResponsePayload,
+  removedIds: [String],
+  users: [PubNubUser]
+)
+
 // MARK: - Requests
 
 public struct MemberFetchRequest: Equatable {

@@ -135,7 +135,7 @@ public struct UserReducer {
     case let .membersRetrieved(_, _, (users as [T]) as Any),
          let .membersAdded(_, _, (users as [T]) as Any),
          let .membersUpdated(_, _, (users as [T]) as Any),
-         let .membersRemoved(_, _, (users as [T]) as Any):
+         let .membersRemoved(_, _, _, (users as [T]) as Any):
       users.forEach { state.users.updatePubNub($0, forKey: $0.id) }
     default:
       break

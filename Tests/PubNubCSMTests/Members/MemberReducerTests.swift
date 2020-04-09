@@ -75,13 +75,14 @@ final class MemberReducerTests: XCTestCase {
   }
 
   func testSpacesLeftAction() {
-    let response = PubNubMembersResponsePayload(status: 200, data: [mockMember], totalCount: nil, next: nil, prev: nil)
+    let response = PubNubMembersResponsePayload(status: 200, data: [], totalCount: nil, next: nil, prev: nil)
 
-    let action = MemberActionType.membersRemoved(spaceId: testSpaceID, response: response, users: [])
+    let action = MemberActionType.membersRemoved(spaceId: testSpaceID, response: response,
+                                                 removedIds: [mockMember.id], users: [])
 
     MemberReducer.reducer(action, state: &mockMemberState)
 
-    XCTAssertEqual(mockMemberState.membersBySpaceId[testSpaceID], [mockMember])
+    XCTAssertEqual(mockMemberState.membersBySpaceId[testSpaceID], [])
   }
 
   func testUserAddedToSpaceEventAction() {

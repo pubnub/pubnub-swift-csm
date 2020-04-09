@@ -68,7 +68,7 @@ public final class PubNubServiceProvider {
 
 extension PubNubServiceProvider {
   public func set(uuid: String) {
-    `set`(service: pubnub?.set(uuid: uuid))
+    set(service: pubnub?.set(uuid: uuid))
   }
 
   public func subscribe(_ channel: String, presence: Bool = false) {
