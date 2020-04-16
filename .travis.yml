@@ -10,15 +10,38 @@ cache:
   - /Users/travis/.rvm/ # RVM
   - $HOME/Library/Caches/Homebrew # brew
 
+env:
+  global:
+    - SOURCE_FOLDER_PATH="./"
+    - TARGET_FOLDER_PATH="./"
+    - GH_USER_NAME="Client Engineering Bot"
+    - GH_USER_EMAIL="client-engineering@pubnub.com"
+
+
 before_install:
   - gem install -v 2.0.1 bundler
   - bundle install && brew bundle
+  - ./.travis/bootstrap.sh
+  - ./.travis/scripts/key_decrypt.sh deployment_keys.tar deployment_keys $encrypted_6d1240be3543_key $encrypted_6d1240be3543_iv
+  - ./.travis/scripts/git_config.sh
+
 
 stages:
   - name: "Unit Tests"
     if: type = push
   - name: Validate
     if: type = pull_request
+  - name: "release candidate"
+    if: |
+      type != pull_request \
+      AND tag IS present \
+      AND tag =~ ^v?\d+\.\d+\.\d+-rc\.\d+$
+  - name: "release"
+    if: |
+      type != pull_request \
+      AND tag IS present \
+      AND tag =~ ^v?\d+\.\d+\.\d+$
+
 jobs:
   include:
     - stage: Validate
@@ -34,6 +57,15 @@ jobs:
       script: bundle exec fastlane test --env ios
     - name: macOS
       script: bundle exec fastlane test --env macos
+    - stage: "release candidate"
+      name: "Deploy release candidate"
+      script:
+        - ./.travis/scripts/deploy.sh release-candidate pubnub/pubnub-swift-csm
+    - stage: "release"
+      name: "Deploy release"
+      script:
+        - ./.travis/scripts/deploy.sh release pubnub/pubnub-swift-csm
+
 
 before_cache:
   - rvm cleanup all

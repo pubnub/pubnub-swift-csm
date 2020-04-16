@@ -1,5 +1,5 @@
 current directory: /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/ffi-1.12.2/ext/ffi_c
-/Users/travis/.rvm/rubies/ruby-2.5.3/bin/ruby -I /Users/travis/.rvm/rubies/ruby-2.5.3/lib/ruby/site_ruby/2.5.0 -r ./siteconf20200409-10286-9dbg3l.rb extconf.rb
+/Users/travis/.rvm/rubies/ruby-2.5.3/bin/ruby -I /Users/travis/.rvm/rubies/ruby-2.5.3/lib/ruby/site_ruby/2.5.0 -r ./siteconf20200416-10175-22ref2.rb extconf.rb
 checking for ffi.h... no
 checking for ffi.h in /usr/local/include,/usr/include/ffi... no
 checking for shlwapi.h... no
@@ -138,4 +138,4 @@ compiling Types.c
 compiling Variadic.c
 compiling ffi.c
 linking shared-object ffi_c.bundle
-/usr/bin/install -m 0755 ffi_c.bundle ./.gem.20200409-10286-rn2q1m
+/usr/bin/install -m 0755 ffi_c.bundle ./.gem.20200416-10175-tsa6lx

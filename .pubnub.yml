@@ -1,6 +1,11 @@
 ---
 changelog:
   - changes:
+    - text: "Message reducer deduplication logic updated to replace old message if timetokens match"
+      type: enhancement
+    date: 2020-04-16
+    version: v0.1.2
+  - changes:
     - text: "Membership/Member actions now include the removed/left elements"
       type: enhancement
     date: 2020-03-30

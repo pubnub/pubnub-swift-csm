@@ -1,5 +1,5 @@
 current directory: /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/unf_ext-0.0.7.7/ext/unf_ext
-/Users/travis/.rvm/rubies/ruby-2.5.3/bin/ruby -I /Users/travis/.rvm/rubies/ruby-2.5.3/lib/ruby/site_ruby/2.5.0 -r ./siteconf20200409-10286-rotix3.rb extconf.rb
+/Users/travis/.rvm/rubies/ruby-2.5.3/bin/ruby -I /Users/travis/.rvm/rubies/ruby-2.5.3/lib/ruby/site_ruby/2.5.0 -r ./siteconf20200416-10175-1lfg5y2.rb extconf.rb
 checking for -lstdc++... yes
 creating Makefile
 
@@ -35,4 +35,4 @@ linking shared-object unf_ext.bundle
 
 current directory: /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/unf_ext-0.0.7.7/ext/unf_ext
 make "DESTDIR=" install
-/usr/bin/install -m 0755 unf_ext.bundle ./.gem.20200409-10286-118vp2d
+/usr/bin/install -m 0755 unf_ext.bundle ./.gem.20200416-10175-6njksr

@@ -1,5 +1,5 @@
 current directory: /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/json-2.3.0/ext/json
-/Users/travis/.rvm/rubies/ruby-2.5.3/bin/ruby -I /Users/travis/.rvm/rubies/ruby-2.5.3/lib/ruby/site_ruby/2.5.0 -r ./siteconf20200409-10286-1xz9q4q.rb extconf.rb
+/Users/travis/.rvm/rubies/ruby-2.5.3/bin/ruby -I /Users/travis/.rvm/rubies/ruby-2.5.3/lib/ruby/site_ruby/2.5.0 -r ./siteconf20200416-10175-1scdino.rb extconf.rb
 creating Makefile
 
 current directory: /Users/travis/build/pubnub/pubnub-swift-csm-private/vendor/bundle/ruby/2.5.0/gems/json-2.3.0/ext/json

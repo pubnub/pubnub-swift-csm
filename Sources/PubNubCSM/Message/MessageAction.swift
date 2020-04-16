@@ -118,10 +118,12 @@ public struct MessageReducer {
     case let .messageSent(channelId, payload as T.Content, timetoken),
          let .receivedMessageEvent(channelId, payload as T.Content, timetoken):
       state.messagesByChannel
-        .merge([channelId: [T(channel: channelId, message: payload, at: timetoken)]]) { $0.merge(other: $1) }
+        .merge(
+          [channelId: [T(channel: channelId, message: payload, at: timetoken)]]
+        ) { $0.deduplicate(by: \.timetoken, contentsOf: $1) }
 
     case let .messageHistoryRetrieved((response as [String: [T]]) as Any):
-      state.messagesByChannel.merge(response) { $0.merge(other: $1) }
+      state.messagesByChannel.merge(response) { $0.deduplicate(by: \.timetoken, contentsOf: $1) }
 
     default:
       break

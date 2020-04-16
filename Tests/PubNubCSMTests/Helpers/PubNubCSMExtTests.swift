@@ -124,3 +124,118 @@ final class PubNubCSMExtTests: XCTestCase {
     XCTAssertEqual(usersById[testUser.id], newerUser)
   }
 }
+
+// MARK: - Dedupe
+
+extension PubNubCSMExtTests {
+  struct TestValue: Equatable {
+    var key: String
+    var value: Int
+
+    init(_ value: Int = 0, _ key: String) {
+      self.key = key
+      self.value = value
+    }
+
+    init(_ value: Int = 0) {
+      key = value.description
+      self.value = value
+    }
+  }
+
+  func testArrayDedupe_emptyList() {
+    let original = [TestValue]()
+    let other = [TestValue(0), TestValue(1)]
+
+    XCTAssertEqual(original.deduplicate(by: \.value, contentsOf: other), other)
+    XCTAssertEqual(other.deduplicate(by: \.value, contentsOf: original), other)
+  }
+
+  func testArrayDedupe_mergeMirror() {
+    let original = [TestValue(0), TestValue(1)]
+    let other = [TestValue(3), TestValue(4)]
+
+    XCTAssertEqual(original.deduplicate(by: \.value, contentsOf: other), original + other)
+    XCTAssertEqual(other.deduplicate(by: \.value, contentsOf: original), original + other)
+  }
+
+  func testArrayDedupe_dedupe_single() {
+    let original = [TestValue(0), TestValue(1)]
+    let other = [TestValue(1, "0")]
+
+    XCTAssertEqual(original.deduplicate(by: \.value, contentsOf: other),
+                   [TestValue(0), TestValue(1, "0")])
+  }
+
+  func testArrayDedupe_dedupe_multiple() {
+    let original = [TestValue(0), TestValue(1)]
+    let other = [TestValue(1), TestValue(3), TestValue(0), TestValue(4)]
+
+    XCTAssertEqual(original.deduplicate(by: \.value, contentsOf: other),
+                   [TestValue(0), TestValue(1), TestValue(3), TestValue(4)])
+  }
+
+  func testArrayDedupe_replaceMatchingKeypath() {
+    let original = [TestValue(0), TestValue(1)]
+    let other = [TestValue(3), TestValue(0, "2"), TestValue(0, "0"), TestValue(4)]
+
+    XCTAssertEqual(original.deduplicate(by: \.value, contentsOf: other),
+                   [TestValue(0, "0"), TestValue(1), TestValue(3), TestValue(4)])
+  }
+
+  func testArrayDedupe_replaceMatchingKeypath_keepOriginal() {
+    let original = [TestValue(0), TestValue(1)]
+    let other = [TestValue(3), TestValue(0, "1"), TestValue(0, "0"), TestValue(4)]
+
+    XCTAssertEqual(original.deduplicate(by: \.value, contentsOf: other, perserveOriginal: true),
+                   [TestValue(0), TestValue(1), TestValue(3), TestValue(4)])
+  }
+}
+
+// MARK: - Safe Subscript
+
+extension PubNubCSMExtTests {
+  func testGetSafeSubscript_InRange() {
+    let testArray = [0, 1, 2, 3]
+
+    XCTAssertEqual(testArray[safe: 0], 0)
+  }
+
+  func testGetSafeSubscript_OutOfRange() {
+    let testArray = [0, 1, 2, 3]
+
+    XCTAssertNil(testArray[safe: -1])
+  }
+
+  func testSetSafeSubscript_InRange() {
+    var testArray = [0, 1, 2, 3]
+
+    testArray[safe: 0] = 5
+
+    XCTAssertEqual(testArray[safe: 0], 5)
+  }
+
+  func testSetSafeSubscript_BeforeRange() {
+    var testArray = [0, 1, 2, 3]
+
+    testArray[safe: -1] = 5
+
+    XCTAssertEqual(testArray.first, 5)
+  }
+
+  func testSetSafeSubscript_AfterRange() {
+    var testArray = [0, 1, 2, 3]
+
+    testArray[safe: 100] = 5
+
+    XCTAssertEqual(testArray.last, 5)
+  }
+
+  func testSetSafeSubscript_newValueNil() {
+    var testArray = [0, 1, 2, 3]
+
+    testArray[safe: -1] = nil
+
+    XCTAssertEqual(testArray, testArray)
+  }
+}

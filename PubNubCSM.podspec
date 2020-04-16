@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'PubNubCSM'
-  s.version  = '1.0.0'
+  s.version  = '0.1.2'
   s.homepage = 'https://github.com/pubnub/pubnub-swift-csm'
   s.documentation_url = 'https://www.pubnub.com/docs/chat'
   s.authors = { 'PubNub, Inc.' => 'support@pubnub.com' }
